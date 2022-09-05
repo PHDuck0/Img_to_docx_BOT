@@ -1,24 +1,17 @@
 import docx
-from docx.shared import Cm
+from typing import List
 from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent
-MEDIA_FOLDER = BASE_DIR / 'media'
-DOCX_FOLDER = BASE_DIR / 'documents'
+from docx.shared import Cm
 
 
-def save_as_docx(user_name):
-    """ insert image in .docx file and save it """
-    document_path = DOCX_FOLDER / (user_name + '.docx')
+def save_as_docx(docx_filepath: Path, photo_paths: List[Path]):
+    """ insert images into .docx file and save it """
 
-    if document_path.exists():
-        document_path.unlink()
-        print('file deleted')
-
-    photo_path = MEDIA_FOLDER / '1.jpg'
+    # delete docx file if exists
+    if docx_filepath.exists():
+        docx_filepath.unlink()
 
     document = docx.Document()
-    document.add_picture(photo_path, width=Cm(19))
 
     # change margins of entire document
     for sect in document.sections:
@@ -27,10 +20,11 @@ def save_as_docx(user_name):
         sect.top_margin = Cm(0.5)
         sect.bottom_margin = Cm(0.5)
 
-    document.save(document_path)
-    print('file saved')
+    # insert photo(s)
+    for photo_path in photo_paths:
+        document.add_picture(str(photo_path), width=Cm(19))
 
+        # delete unnecessary anymore photo
+        photo_path.unlink()
 
-if __name__ == '__main__':
-    username = 'Думанський Дмитро'
-    save_as_docx(username)
+    document.save(docx_filepath)

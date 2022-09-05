@@ -134,3 +134,4 @@ documents
 *.pyo
 .idea
 token.txt
+run.bat

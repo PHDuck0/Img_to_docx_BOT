@@ -1,10 +1,11 @@
 import docx
-from typing import List
+from typing import Generator, Any
 from pathlib import Path
 from docx.shared import Cm
+from PIL import Image
 
 
-def save_as_docx(docx_filepath: Path, photo_paths: List[Path]):
+def save_as_docx(docx_filepath: Path, photo_paths: Generator[Path | Any, None, None]):
     """ insert images into .docx file and save it """
 
     # delete docx file if exists
@@ -28,3 +29,18 @@ def save_as_docx(docx_filepath: Path, photo_paths: List[Path]):
         photo_path.unlink()
 
     document.save(docx_filepath)
+
+
+def save_as_pdf(pdf_filepath: Path, photo_paths: Generator[Path | Any, None, None]):
+    """ saves one image or more as PDF file """
+
+    images = [Image.open(photo_path) for photo_path in photo_paths]
+
+    if len(images) == 1:
+        images[0].save(pdf_filepath)
+    else:
+        images[0].save(pdf_filepath, save_all=True, append_images=images[1:])
+
+    # delete all images
+    for photo_path in photo_paths:
+        photo_path.unlink()

@@ -29,7 +29,9 @@ dp = Dispatcher(bot, storage=storage)
 
 BASE_DIR = Path(__file__).resolve().parent
 MEDIA_FOLDER = BASE_DIR / 'media'
+MEDIA_FOLDER.mkdir(exist_ok=True)
 DOC_FOLDER = BASE_DIR / 'documents'
+DOC_FOLDER.mkdir(exist_ok=True)
 
 
 class AlbumMiddleware(BaseMiddleware):
@@ -86,7 +88,7 @@ async def handle_photos(message: types.Message, album: List[types.Message] = Non
     # create user directory
     username = message.from_user.full_name
     user_folder = MEDIA_FOLDER / username
-    user_folder.mkdir(exist_ok=True)
+    user_folder.mkdir(exist_ok=True, parents=True)
 
     if not album:
         album = [message]

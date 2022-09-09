@@ -5,7 +5,7 @@ from docx.shared import Cm
 from PIL import Image
 
 
-def save_as_docx(docx_filepath: Path, photo_paths: Generator[Path | Any, None, None]):
+def save_as_docx(docx_filepath: Path, photo_paths):
     """ insert images into .docx file and save it """
 
     # delete docx file if exists
@@ -31,7 +31,7 @@ def save_as_docx(docx_filepath: Path, photo_paths: Generator[Path | Any, None, N
     document.save(docx_filepath)
 
 
-def save_as_pdf(pdf_filepath: Path, photo_paths: Generator[Path | Any, None, None]):
+def save_as_pdf(pdf_filepath: Path, photo_paths):
     """ saves one image or more as PDF file """
 
     images = [Image.open(photo_path) for photo_path in photo_paths]

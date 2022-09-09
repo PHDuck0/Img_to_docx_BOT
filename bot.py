@@ -1,3 +1,4 @@
+import os
 import asyncio
 import logging
 import shutil
@@ -11,9 +12,10 @@ from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.types import ContentType
 
 from convert import save_as_docx, save_as_pdf
-
-with open('token.txt', 'r') as token_file:
-    API_TOKEN = token_file.read()
+API_TOKEN = f"{os.environ.get('TELEGRAM_API_ID')}:{os.environ.get('TELEGRAM_API_HASH')}"
+if API_TOKEN.startswith('None'):
+    with open('token.txt', 'r') as token_file:
+        API_TOKEN = token_file.read()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -103,8 +105,8 @@ async def handle_photos(message: types.Message, album: List[types.Message] = Non
     await message.reply('Виберіть формат для збереження файлу:', reply_markup=keyboard_markup)
 
 
-@dp.callback_query_handler(text='pdf')  # if cb.data == 'no'
-@dp.callback_query_handler(text='docx')  # if cb.data == 'yes'
+@dp.callback_query_handler(text='pdf')
+@dp.callback_query_handler(text='docx')
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     """
     Saves file after user chooses format by clicking button

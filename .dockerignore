@@ -136,7 +136,4 @@ dmypy.json
 cython_debug/
 
 token.txt
-run.bat
 docker-compose.yml
-tqueue.binlog
-webhooks_db.binlog

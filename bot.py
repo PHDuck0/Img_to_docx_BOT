@@ -12,10 +12,7 @@ from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.types import ContentType
 
 from convert import save_as_docx, save_as_pdf
-API_TOKEN = f"{os.environ.get('TELEGRAM_API_ID')}:{os.environ.get('TELEGRAM_API_HASH')}"
-if API_TOKEN.startswith('None'):
-    with open('token.txt', 'r') as token_file:
-        API_TOKEN = token_file.read()
+API_TOKEN = f"{os.environ.get('TELEGRAM_API_TOKEN')}"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -125,7 +122,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         await bot.send_message(chat_id=query.from_user.id, text='Your file already saved!')
         return
 
-    photo_paths = user_folder.glob('*.jpg')
+    photo_paths = list(user_folder.glob('*.jpg')).sort(key=str)
 
     if answer_data == 'pdf':
         filepath = DOC_FOLDER / (username + '.pdf')

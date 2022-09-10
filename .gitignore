@@ -140,5 +140,5 @@ run.bat
 .git
 tqueue.binlog
 webhooks_db.binlog
-Dockerfile
+
 docker-compose.yml
